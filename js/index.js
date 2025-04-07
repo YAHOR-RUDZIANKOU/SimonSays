@@ -1,8 +1,8 @@
 import {createMenu} from "./createMenu.js";
 import{createKeyboards} from "./createKeyboards.js";
-import { createBtn } from "./utils.js";
+import { createBtn } from "./createBtn.js";
 
-createBtn();
 createMenu();
+createBtn();
 createKeyboards('numbers');
 

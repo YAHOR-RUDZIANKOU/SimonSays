@@ -4,6 +4,7 @@ html {
 
 body {
   background-color: black;
+  font-family: "Roboto", sans-serif;
 }
 
 .wrapper {
@@ -13,34 +14,19 @@ body {
 }
 
 .menu__items-content {
-  position: absolute;
-  top: 45px;
-  left: 0;
   width: 220px;
-  transform: translateY(90px);
-  transition: transform 1s linear;
   display: flex;
   flex-direction: column;
   gap: 5px;
-}
-
-.menu__wrapper:hover .menu__items-content {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  transform: translateY(0px);
-  transition: transform 1s linear;
 }
 
 .menu__items {
-  min-height: 90px;
-  clip-path: inset(0 0 0 0);
+  min-height: 130px;
+  margin-top: 5px;
 }
 
 .menu__wrapper {
-  position: relative;
-  top: 50px;
+  padding-top: 50px;
   max-width: 220px;
   width: 100%;
   margin: 0 auto;
@@ -73,24 +59,80 @@ body {
 
 .keyboard__container {
   width: 590px;
-  max-height: 230px;
+  min-height: 230px;
   margin: 70px auto 0px;
 }
 
-.keyboard__items{
+.keyboard__items {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
 }
 
-.button__start-wrapper{
-  position: fixed;
-  left: 50%; 
-  transform: translateX(-50%);
+.button__general {
   background-color: #5dc6ff;
   color: black;
   padding: 20px;
   font-size: 30px;
-  border-radius: 50%;
-  border: 1px solid white;
+  border-radius: 30px;
+  border: 2px solid white;
+}
+
+.menu__container {
+  display: flex;
+  flex-direction: column;
+}
+
+.choose__level {
+  font-size: 25px;
+  background-color: orange;
+}
+
+.none {
+  display: none;
+}
+
+.button__container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.input__text-wrapper{
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.input__text{
+  border-radius: 4px;
+  padding: 5px 5px;        /* внутренние отступы */
+  border: 1px solid #ccc;
+  font-size: 20px;
+  background-color: #ccc;
+}
+
+.active{
+  background-color: orange;
+}
+
+
+
+
+.current__round-wrapper{
+  position: fixed;
+  top: 10%;
+  right: 10%;
+  display: flex;
+  gap: 8px;
+}
+
+.current__round-text{
+  font-size: 20px;
+  color: white;
+}
+
+.current__round-number{
+  font-size: 20px;
+  color: white;
 }
