@@ -1,7 +1,7 @@
 import { createKeyboards } from "./createKeyboards.js";
 import { changeFon } from "./utils.js";
 
-export function createMenu() {
+export function createMenu(level) {
   const btnStart = document.querySelector(".button__start-wrapper");
   const wrapper = document.createElement("div");
   wrapper.classList.add("wrapper");
@@ -23,7 +23,7 @@ export function createMenu() {
   menuItemsContent.classList.add("menu__items-content");
 
   const easyItem = document.createElement("button");
-  easyItem.classList.add("menu__item", "choose__level", "menu__item-easy");
+  easyItem.classList.add("menu__item", "menu__item-easy");
   easyItem.textContent = "Easy";
 
   const mediumItem = document.createElement("button");
@@ -68,5 +68,12 @@ export function createMenu() {
       changeFon(hard);
   });
 
+  if(level==='numbers'){
+    changeFon(easyLevel);
+  }else if(level==='letters'){
+    changeFon(medium);
+  }else {
+    changeFon(hard);
+  }
  
 }

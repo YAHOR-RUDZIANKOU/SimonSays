@@ -70,20 +70,30 @@ export function changeButtons() {
 }
 
 export function clickKeyBoards() {
+  const btnAll = Array.from(document.querySelectorAll(".btn"));
   const input = document.querySelector(".input__text");
   const keyBoardItem = Array.from(document.querySelectorAll(".keyboard__item"));
   keyBoardItem.forEach((value) => {
     value.addEventListener("click", showInput);
   });
-
-  function showInput(event) {
-    input.value += event.target.innerText;
-  }
 }
 
-function shuffle(array) {
+export function showInput(event) {
+  const btnAll = Array.from(document.querySelectorAll(".btn"));
+  const input = document.querySelector(".input__text");
+  event.target.classList.add("active");
+  input.value += event.target.innerText;
+  disabledAllBtn(btnAll);
+
+  setTimeout(() => {
+    event.target.classList.remove("active");
+    noDisabledAllBtn(btnAll);
+  }, 500);
+}
+
+export function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1)); // случайный индекс от 0 до i
+    let j = Math.floor(Math.random() * (i + 1)); // случайный индекс от 0 до i
     [array[i], array[j]] = [array[j], array[i]]; // меняем местами элементы
   }
   return array;
@@ -103,7 +113,7 @@ export function createCurrentRound() {
   text.textContent = "Round";
 
   const number = document.createElement("button");
-  number.classList.add("current__round-number","btn");
+  number.classList.add("current__round-number", "btn");
   number.textContent = "1";
 
   roundWrapper.appendChild(text);
@@ -113,75 +123,169 @@ export function createCurrentRound() {
   wrapper.appendChild(roundContainer);
 }
 
-export function getSliceCount(){
-  let currentNumber=document.querySelector('.current__round-number').innerHTML;
+export function getSliceCount() {
+  let currentNumber = document.querySelector(".current__round-number").innerHTML;
   let n;
-  if(+currentNumber===1){
-    n=2;
-  }else if(+currentNumber===2){
-    n=4
-  }else if(+currentNumber===3){
-    n=6
-  }else if(+currentNumber===4){
-    n=8
-  }else if(+currentNumber===5){
-    n=10
-  }else{
-    console.log('error')
+  if (+currentNumber === 1) {
+    n = 2;
+  } else if (+currentNumber === 2) {
+    n = 4;
+  } else if (+currentNumber === 3) {
+    n = 6;
+  } else if (+currentNumber === 4) {
+    n = 8;
+  } else if (+currentNumber === 5) {
+    n = 10;
+  } else {
+    console.log("error");
   }
 
   return n;
 }
 
+function disabledAllBtn(btnAll) {
+  btnAll.forEach((value) => {
+    value.disabled = true;
+    // console.log("aaaaaaaaaaaa");
+  });
+}
 
-let previousSequence = [];
-let sequenceShown = false;   // Переменная для хранения предыдущей последовательности
+function noDisabledAllBtn(btnAll) {
+  btnAll.forEach((value) => {
+    value.disabled = false;
+  });
+}
+
+export function insertValueToInput(event) {
+  // console.log("666");
+  const key = event.key.toLowerCase();
+  const keyButton = document.querySelector(`.keyboard__item[data-key="${key}"]`);
+  let input = document.querySelector(".input__text");
+  let strArray = previousSequence.join("");
+
+  if (/^[a-zA-Z0-9]$/.test(key)) {
+    input.value += key;
+
+    if (keyButton) {
+      keyButton.classList.add("active");
+      // document.removeEventListener("keydown", insertValueToInput);
+      setTimeout(() => {
+        keyButton.classList.remove("active");
+        // document.addEventListener("keydown", insertValueToInput);
+      }, 100);
+    }
+  }
+}
+
+export let previousSequence = [];
+export function setPreviousSequence(newSequence) {
+  previousSequence = newSequence;
+}
+let sequenceShown = false; // Переменная для хранения предыдущей последовательности
 export async function showImitation(array, n) {
-  const repeatBtn=document.querySelector('.button__general');
+  const repeatBtn = document.querySelector(".button__general");
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   let allKey = Array.from(document.querySelectorAll(".keyboard__item"));
   let input = document.querySelector(".input__text");
   const btnAll = Array.from(document.querySelectorAll(".btn"));
-  let sheffleNumbers ;
+  let sheffleNumbers;
 
-  if ( !sequenceShown) {
+  if (!sequenceShown) {
     sheffleNumbers = shuffle([...array]);
-    previousSequence = sheffleNumbers.slice(0, n);  // Сохраняем текущую последовательность
+    previousSequence = sheffleNumbers.slice(0, n); // Сохраняем текущую последовательность
   }
 
-  const resultArray = previousSequence;
-
+  let resultArray = previousSequence;
+  console.log(previousSequence);
   for (let index = 0; index < resultArray.length; index++) {
-    const element = resultArray[index];
+    let element = resultArray[index];
 
     await delay(300);
     allKey.forEach((value) => {
       if (element === value.dataset.key) {
         value.classList.add("active");
         input.value += element;
-        btnAll.forEach((value) => {
-          value.disabled = true;
-        });
-        repeatBtn.disabled=true;
+        disabledAllBtn(btnAll);
+        repeatBtn.disabled = true;
       }
     });
 
-    await delay(800);
+    await delay(500);
     allKey.forEach((value) => {
       if (element === value.dataset.key) {
         value.classList.remove("active");
       }
     });
 
-    await delay(500);
+    await delay(300);
   }
 
-  btnAll.forEach((value) => {
-    value.disabled = false;
-  });
-  repeatBtn.disabled=false;
+  noDisabledAllBtn(btnAll);
+  repeatBtn.disabled = false;
   input.value = "";
+
+  document.addEventListener("keydown", insertValueToInput);
 
   sequenceShown = true;
   // previousSequence.length=0;
 }
+
+export function checkAnswer() {
+  const keyBoardItem = Array.from(document.querySelectorAll(".keyboard__item"));
+  document.addEventListener("keydown", handleKeyPress);
+  keyBoardItem.forEach((value) => {
+    value.addEventListener("click", handleKeyPress);
+  });
+}
+
+// export async function handleKeyPress(event){
+//   const keyBoardItem = Array.from(document.querySelectorAll(".keyboard__item"));
+//   let strArray=previousSequence.join('');
+//   let input = document.querySelector(".input__text");
+
+//   if(strArray.startsWith(input.value)){
+//     if(input.value.length===strArray.length){
+//       document.removeEventListener("keydown", insertValueToInput);
+//       await keyBoardItem.forEach((value) => {
+//         value.removeEventListener("click", showInput);
+//       });
+//       keyBoardItem.forEach((value)=>{
+//         value.disabled=true;
+//       })
+//       console.log('правильно');
+//     }
+//   }else{
+//     console.log("не правильно");
+//   }
+// }
+
+export function handleKeyPress(event) {
+  const keyBoardItem = Array.from(document.querySelectorAll(".keyboard__item"));
+  let strArray = previousSequence.join("");
+  let input = document.querySelector(".input__text");
+
+  if (strArray.startsWith(input.value)) {
+    if (input.value.length === strArray.length) {
+      blockAllKeyInputs(keyBoardItem);
+      console.log("правильно");
+    }
+  } else {
+    blockAllKeyInputs(keyBoardItem);
+    console.log("не правильно");
+  }
+}
+
+function blockAllKeyInputs(keyBoardItem) {
+  document.removeEventListener("keydown", insertValueToInput);
+  keyBoardItem.forEach((value) => {
+    value.removeEventListener("click", showInput);
+  });
+  keyBoardItem.forEach((value) => {
+    value.disabled = true;
+  });
+}
+
+
+// export function changeResultArray(){
+
+// }
