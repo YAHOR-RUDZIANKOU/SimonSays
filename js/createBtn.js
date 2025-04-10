@@ -11,19 +11,26 @@ import {
   mix,
   setPreviousSequence,
   shuffle,
-  getSliceCount
+  setCount,
+  changeFlagSeq,
+  noBlockAllKeyInputs,
 } from "./utils.js";
 import { createMenu } from "./createMenu.js";
 import { createKeyboards } from "./createKeyboards.js";
 
+let repeatClicked = false;
 export function createBtn() {
   let wrapper = document.querySelector(".wrapper");
 
   let btnContainer = document.createElement("div");
   btnContainer.classList.add("button__container");
 
+  const btnNext = document.createElement("button");
+  btnNext.classList.add("button__general", "button__next", "none");
+  btnNext.textContent = "Next";
+
   const btnRepeat = document.createElement("button");
-  btnRepeat.classList.add("button__general", "button__repeat", "none");
+  btnRepeat.classList.add("button__general", "button__repeat", "none","btn");
   btnRepeat.textContent = "Repeat the sequence";
 
   const btnStart = document.createElement("button");
@@ -34,6 +41,7 @@ export function createBtn() {
   btnNew.classList.add("button__general", "button__new", "none", "btn");
   btnNew.textContent = "New game";
 
+  btnContainer.appendChild(btnNext);
   btnContainer.appendChild(btnRepeat);
   btnContainer.appendChild(btnStart);
   btnContainer.appendChild(btnNew);
@@ -55,29 +63,36 @@ export function createBtn() {
     "click",
     () => {
       startGame();
+      repeatClicked=true;
       // console.log('repeat');
     },
     { once: true }
   );
 
-  btnNew.addEventListener("click", () => {
-    let count = Array.from(document.querySelectorAll(".keyboard__item"));
-    // console.log(typeof(count.length))
-    console.log(previousSequence);
-    let n=getSliceCount();
-    document.body.innerHTML = "";
-    // createKeyboards('numbers');
-    if (count.length === 10) {
-      createAllElement("numbers");
-      setPreviousSequence(shuffle([...numbers]).slice(0,n));
-    } else if (count.length === 26) {
-      createAllElement("letters");
-      setPreviousSequence(shuffle([...letters]).slice(0,n));
-    } else {
-      createAllElement("mix");
-      setPreviousSequence(shuffle([...mix]).slice(0,n));
+  btnNew.addEventListener("click", showMainWindows);
+
+  btnNext.addEventListener("click", (event) => {
+    const keyBoardItem = Array.from(document.querySelectorAll(".keyboard__item"));
+    btnNext.classList.add("none");
+    btnRepeat.classList.remove("none");
+
+    let currentRound = document.querySelector(".current__round-number");
+    let currentRoundNumber = currentRound.innerHTML;
+    currentRound.innerHTML = +currentRoundNumber + 1;
+
+    if(repeatClicked){
+      btnRepeat.addEventListener(
+        "click",
+        () => {
+          startGame();
+        },
+        { once: true }
+      );
     }
-    console.log(previousSequence);
+
+    noBlockAllKeyInputs(keyBoardItem);
+    changeFlagSeq(false);
+    startGame();
   });
 }
 
@@ -85,4 +100,21 @@ function createAllElement(par) {
   createMenu(par);
   createBtn();
   createKeyboards(par);
+}
+
+export function showMainWindows() {
+  setCount(0);
+  let count = Array.from(document.querySelectorAll(".keyboard__item"));
+  document.body.innerHTML = "";
+  if (count.length === 10) {
+    createAllElement("numbers");
+    setPreviousSequence(shuffle([...numbers]).slice(0, 2));
+  } else if (count.length === 26) {
+    createAllElement("letters");
+    setPreviousSequence(shuffle([...letters]).slice(0, 2));
+  } else {
+    createAllElement("mix");
+    setPreviousSequence(shuffle([...mix]).slice(0, 2));
+  }
+  console.log(previousSequence);
 }

@@ -133,3 +133,61 @@ body {
   font-size: 20px;
   color: white;
 }
+
+/* затемнение и блокировка фона */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5); /* затемнение */
+  z-index: 999; /* выше фона, ниже самого попапа */
+}
+
+/* сам попап */
+.modal {
+  position: fixed;
+  top: -7%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: top 0.9s linear;
+  background: white;
+  padding: 25px;
+  z-index: 1000; /* выше всего */
+}
+
+.title__error{
+  color: red;
+}
+
+.modal__wrapper{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.close__pop{
+  position: absolute;
+  top: -26px;
+  right: -28px;
+  font-size: 20px;
+}
+
+.title__win{
+  color: green;
+}
+
+.subtitle__win-btn{
+  font-size: 20px;
+}
+
+.title__win{
+  font-size: 19px;
+}
+
+.changeTop{
+  top: 50%;
+}

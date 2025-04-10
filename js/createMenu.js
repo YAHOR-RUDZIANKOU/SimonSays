@@ -53,27 +53,26 @@ export function createMenu(level) {
   const medium = document.querySelector(".menu__item-medium");
   const hard = document.querySelector(".menu__item-hard");
 
-  easyLevel.addEventListener('click',()=>{
-      createKeyboards('numbers');
-      changeFon(easyLevel);
-  })
-
-  medium.addEventListener('click',()=>{
-      createKeyboards('letters');
-      changeFon(medium);
-  })
-
-  hard.addEventListener('click',()=>{
-      createKeyboards();
-      changeFon(hard);
+  easyLevel.addEventListener("click", () => {
+    createKeyboards("numbers");
+    changeFon(easyLevel);
   });
 
-  if(level==='numbers'){
-    changeFon(easyLevel);
-  }else if(level==='letters'){
+  medium.addEventListener("click", () => {
+    createKeyboards("letters");
     changeFon(medium);
-  }else {
+  });
+
+  hard.addEventListener("click", () => {
+    createKeyboards();
+    changeFon(hard);
+  });
+
+  if (level === "numbers") {
+    changeFon(easyLevel);
+  } else if (level === "letters") {
+    changeFon(medium);
+  } else {
     changeFon(hard);
   }
- 
 }

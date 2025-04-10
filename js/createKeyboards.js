@@ -1,7 +1,6 @@
 import { generateKeyLayout,numbers,letters,mix } from "./utils.js";
 
 export function createKeyboards(mode) {
-  // const startBtn=document.querySelector('.button__start-wrapper');
 
   if (mode === "numbers") {
     generateKeyLayout(numbers);

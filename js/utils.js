@@ -1,21 +1,21 @@
 export const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 export const letters = "QWERTYUIOPASDFGHJKLZXCVBNM".split("");
 export const mix = [...numbers, ...letters];
+import { showMainWindows } from "./createBtn.js";
 
 export function generateKeyLayout(arr) {
+
   let keyboardContainer = document.querySelector(".keyboard__container");
   let wrapper = document.querySelector(".wrapper");
   if (keyboardContainer) {
     keyboardContainer.innerHTML = "";
   } else {
-    // Если клавиатуры нет, создаём новый контейнер
     keyboardContainer = document.createElement("div");
     keyboardContainer.classList.add("keyboard__container");
   }
 
   const keyboardItems = document.createElement("div");
   keyboardItems.classList.add("keyboard__items");
-
   for (let i = 0; i < arr.length; i++) {
     const key = document.createElement("button");
     key.classList.add("keyboard__item", "btn");
@@ -70,8 +70,8 @@ export function changeButtons() {
 }
 
 export function clickKeyBoards() {
-  const btnAll = Array.from(document.querySelectorAll(".btn"));
-  const input = document.querySelector(".input__text");
+  // const btnAll = Array.from(document.querySelectorAll(".btn"));
+  // const input = document.querySelector(".input__text");
   const keyBoardItem = Array.from(document.querySelectorAll(".keyboard__item"));
   keyBoardItem.forEach((value) => {
     value.addEventListener("click", showInput);
@@ -126,6 +126,9 @@ export function createCurrentRound() {
 export function getSliceCount() {
   let currentNumber = document.querySelector(".current__round-number").innerHTML;
   let n;
+  // console.log("-------");
+  // console.log(currentNumber);
+  // console.log("-------");
   if (+currentNumber === 1) {
     n = 2;
   } else if (+currentNumber === 2) {
@@ -150,14 +153,13 @@ function disabledAllBtn(btnAll) {
   });
 }
 
-function noDisabledAllBtn(btnAll) {
+export function noDisabledAllBtn(btnAll) {
   btnAll.forEach((value) => {
     value.disabled = false;
   });
 }
 
 export function insertValueToInput(event) {
-  // console.log("666");
   const key = event.key.toLowerCase();
   const keyButton = document.querySelector(`.keyboard__item[data-key="${key}"]`);
   let input = document.querySelector(".input__text");
@@ -168,20 +170,23 @@ export function insertValueToInput(event) {
 
     if (keyButton) {
       keyButton.classList.add("active");
-      // document.removeEventListener("keydown", insertValueToInput);
       setTimeout(() => {
         keyButton.classList.remove("active");
-        // document.addEventListener("keydown", insertValueToInput);
       }, 100);
     }
   }
 }
 
-export let previousSequence = [];
 export function setPreviousSequence(newSequence) {
   previousSequence = newSequence;
 }
+export function changeFlagSeq(boolean) {
+  sequenceShown = boolean;
+}
+
+export let previousSequence = [];
 let sequenceShown = false; // Переменная для хранения предыдущей последовательности
+
 export async function showImitation(array, n) {
   const repeatBtn = document.querySelector(".button__general");
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -224,10 +229,8 @@ export async function showImitation(array, n) {
   repeatBtn.disabled = false;
   input.value = "";
 
-  document.addEventListener("keydown", insertValueToInput);
-
+  document.addEventListener("keyup", insertValueToInput);
   sequenceShown = true;
-  // previousSequence.length=0;
 }
 
 export function checkAnswer() {
@@ -238,54 +241,240 @@ export function checkAnswer() {
   });
 }
 
-// export async function handleKeyPress(event){
-//   const keyBoardItem = Array.from(document.querySelectorAll(".keyboard__item"));
-//   let strArray=previousSequence.join('');
-//   let input = document.querySelector(".input__text");
+export function setCount(value) {
+  count = value;
+}
 
-//   if(strArray.startsWith(input.value)){
-//     if(input.value.length===strArray.length){
-//       document.removeEventListener("keydown", insertValueToInput);
-//       await keyBoardItem.forEach((value) => {
-//         value.removeEventListener("click", showInput);
-//       });
-//       keyBoardItem.forEach((value)=>{
-//         value.disabled=true;
-//       })
-//       console.log('правильно');
-//     }
-//   }else{
-//     console.log("не правильно");
-//   }
-// }
+let count = 0;
 
 export function handleKeyPress(event) {
-  const keyBoardItem = Array.from(document.querySelectorAll(".keyboard__item"));
-  let strArray = previousSequence.join("");
-  let input = document.querySelector(".input__text");
-
-  if (strArray.startsWith(input.value)) {
-    if (input.value.length === strArray.length) {
-      blockAllKeyInputs(keyBoardItem);
-      console.log("правильно");
+  setTimeout(() => {
+    const btmNext = document.querySelector(".button__next");
+    const btmRepeat = document.querySelector(".button__repeat");
+    const keyBoardItem = Array.from(document.querySelectorAll(".keyboard__item"));
+    let modal = document.querySelector(".modal-backdrop");
+    let musicOneTry = document.getElementById("oneTry");
+    let musicLose = document.getElementById("loseMusic");
+    let strArray = previousSequence.join("");
+    let input = document.querySelector(".input__text");
+    let btnRepeat = document.querySelector(".button__repeat");
+    if (!modal) {
+      if (strArray.startsWith(input.value)) {
+        if (input.value.length === strArray.length) {
+          // console.log("все работает");
+          blockAllKeyInputs(keyBoardItem);
+          btmNext.classList.remove("none");
+          btmRepeat.classList.add("none");
+          setTimeout(() => {
+            input.value = "";
+          }, 200);
+          // console.log("правильно");
+          document.getElementById("winMusic").play();
+          setCount(0);
+          checkRound();
+        }
+      } else {
+        if (count === 1) {
+          btnRepeat.disabled = true;
+          createLosePopUp();
+          blockAllKeyInputs(keyBoardItem);
+          console.log("больше нет попыток");
+          musicLose.play();
+          showLinearPop();
+          setTimeout(() => {
+            input.value = "";
+            musicLose.pause();
+            musicLose.currentTime = 0;
+          }, 1500);
+        } else {
+          count = count + 1;
+          musicOneTry.play();
+          console.log("осталась одна попытка");
+          createErrorPopUp();
+          showLinearPop();
+          setTimeout(() => {
+            input.value = "";
+            musicOneTry.pause();
+            musicOneTry.currentTime = 0;
+          }, 1500);
+        }
+      }
     }
-  } else {
-    blockAllKeyInputs(keyBoardItem);
-    console.log("не правильно");
-  }
+  }, 0); // 👈 здесь ключ
+}
+
+function showLinearPop() {
+  setTimeout(() => {
+    changeTop();
+    console.log("555");
+  }, 200);
+}
+
+function changeTop() {
+  let popUpModal = document.querySelector(".modal");
+  popUpModal.classList.add("changeTop");
 }
 
 function blockAllKeyInputs(keyBoardItem) {
-  document.removeEventListener("keydown", insertValueToInput);
+  setTimeout(() => {
+    document.removeEventListener("keyup", insertValueToInput);
+    keyBoardItem.forEach((value) => {
+      value.removeEventListener("click", showInput);
+      value.disabled = true;
+    });
+  }, 0);
+}
+
+export function noBlockAllKeyInputs(keyBoardItem) {
+  document.addEventListener("keyup", insertValueToInput);
   keyBoardItem.forEach((value) => {
-    value.removeEventListener("click", showInput);
+    value.addEventListener("click", showInput);
   });
   keyBoardItem.forEach((value) => {
-    value.disabled = true;
+    value.disabled = false;
   });
 }
 
+function createErrorPopUp() {
+  // Создаём backdrop
+  const backdrop = document.createElement("div");
+  backdrop.classList.add("modal-backdrop");
 
-// export function changeResultArray(){
+  // Создаём модальное окно
+  const modal = document.createElement("div");
+  modal.classList.add("modal");
 
-// }
+  // Обёртка внутри модального окна
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("modal__wrapper");
+
+  // Кнопка закрытия
+  const closeImg = document.createElement("img");
+  closeImg.src = "/images/close.png";
+  closeImg.classList.add("close__pop");
+
+  // Заголовок
+  const title = document.createElement("p");
+  title.classList.add("title__error");
+  title.textContent = "Error";
+
+  // Подзаголовок
+  const subtitle = document.createElement("div");
+  subtitle.classList.add("subtitle__error");
+  subtitle.textContent = "One Attempt Left !";
+
+  // Сборка элементов
+  wrapper.appendChild(closeImg);
+  wrapper.appendChild(title);
+  wrapper.appendChild(subtitle);
+
+  modal.appendChild(wrapper);
+  backdrop.appendChild(modal);
+
+  // Добавляем в body
+  document.body.appendChild(backdrop);
+
+  closeImg.addEventListener("click", () => {
+    backdrop.remove();
+  });
+}
+
+function createLosePopUp() {
+  // Создаём backdrop
+  const backdrop = document.createElement("div");
+  backdrop.classList.add("modal-backdrop");
+
+  // Создаём модальное окно
+  const modal = document.createElement("div");
+  modal.classList.add("modal");
+
+  // Обёртка внутри модального окна
+  const wrapper = document.createElement("div");
+  wrapper.classList.add("modal__wrapper");
+
+  // Заголовок
+  const title = document.createElement("p");
+  title.classList.add("title__error");
+  title.textContent = "Alas, you have lost!";
+
+  // Кнопка "Start Over"
+  const button = document.createElement("button");
+  button.classList.add("subtitle__error-btn");
+  button.textContent = "Start Over";
+
+  // Сборка элементов
+  wrapper.appendChild(title);
+  wrapper.appendChild(button);
+
+  modal.appendChild(wrapper);
+  backdrop.appendChild(modal);
+
+  // Добавляем в body
+  document.body.appendChild(backdrop);
+
+  // Обработка клика по кнопке (например, перезапуск игры)
+  button.addEventListener("click", () => {
+    showMainWindows();
+    // previousSequence=[];
+    backdrop.remove(); // Закрытие попапа
+  });
+}
+
+function createWinPopUp() {
+  let wrapper = document.querySelector(".wrapper");
+
+  const backdrop = document.createElement("div");
+  backdrop.classList.add("modal-backdrop");
+
+  const modal = document.createElement("div");
+  modal.classList.add("modal");
+
+  const div = document.createElement("div");
+  div.classList.add("modal__wrapper");
+
+  const title = document.createElement("p");
+  title.classList.add("title__win");
+  title.textContent = "Game over !";
+
+  const button = document.createElement("button");
+  button.classList.add("subtitle__win-btn");
+  button.textContent = "Back to Main Menu";
+
+  // Собираем структуру
+  div.appendChild(title);
+  div.appendChild(button);
+
+  modal.appendChild(div);
+  backdrop.appendChild(modal);
+  wrapper.appendChild(backdrop);
+
+  // Добавляем в документ
+  document.body.appendChild(wrapper);
+
+  button.addEventListener("click", () => {
+    showMainWindows();
+    // previousSequence=[];
+    backdrop.remove(); // Закрытие попапа
+  });
+}
+
+export function createMusicPlayer(src, id) {
+  const wrapper = document.querySelector(".wrapper");
+  const audioPlayer = document.createElement("audio");
+  audioPlayer.id = id;
+  audioPlayer.src = src;
+  wrapper.appendChild(audioPlayer);
+}
+
+function checkRound() {
+  let currentRound = document.querySelector(".current__round-number");
+  if (currentRound.innerHTML === "5") {
+    createMusicPlayer("/music/fulWin.mp3", "finishGame");
+    let music = document.getElementById("finishGame");
+    let input = document.querySelector(".input__text");
+    input.readOnly = true;
+    createWinPopUp();
+    showLinearPop();
+    music.play();
+  }
+}
