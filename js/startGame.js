@@ -1,4 +1,4 @@
-import { showImitation,getSliceCount,checkAnswer,createMusicPlayer,numbers,letters,mix } from "./utils.js";
+import { showImitation,getSliceCount,checkAnswer,createMusicPlayer,numbers,letters,mix ,changeFlagSeq} from "./utils.js";
 
 export async function startGame() {
   createMusicPlayer("/music/winChoose.mp3", "winMusic");
@@ -10,14 +10,17 @@ export async function startGame() {
 
   if (keyItem.length === 10) {
     input.value="";
+    changeFlagSeq(false);
     await showImitation(numbers, count);
     checkAnswer();
   }else if(keyItem.length === 26){
     input.value="";
+    changeFlagSeq(false);
     await showImitation(letters, count);
     checkAnswer();
   }else if(keyItem.length === 36){
     input.value="";
+    changeFlagSeq(false);
     await showImitation(mix, count);
     checkAnswer();
   }else{

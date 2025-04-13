@@ -1,5 +1,5 @@
 html {
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
 }
 
 body {
@@ -11,6 +11,7 @@ body {
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
+  padding: 50px 35px;
 }
 
 .menu__items-content {
@@ -26,12 +27,13 @@ body {
 }
 
 .menu__wrapper {
-  padding-top: 50px;
+  /* padding-top: 50px; */
   max-width: 220px;
   width: 100%;
   margin: 0 auto;
   padding-bottom: 15px;
   position: relative;
+  /* display: none; */
 }
 
 .menu__item {
@@ -96,40 +98,41 @@ body {
   display: flex;
   justify-content: center;
   gap: 20px;
+  margin-top: 25px;
 }
 
-.input__text-wrapper{
+.input__text-wrapper {
   display: flex;
   justify-content: center;
   margin-top: 25px;
 }
 
-.input__text{
+.input__text {
   border-radius: 4px;
-  padding: 5px 5px;        /* внутренние отступы */
+  padding: 5px 5px; /* внутренние отступы */
   border: 1px solid #ccc;
   font-size: 20px;
   background-color: #ccc;
 }
 
-.active{
+.active {
   background-color: orange;
 }
 
-.current__round-wrapper{
-  position: fixed;
-  top: 10%;
-  right: 10%;
+.current__round-wrapper {
+  position: absolute;
+  top: 3%;
+  right: 25%;
   display: flex;
   gap: 8px;
 }
 
-.current__round-text{
+.current__round-text {
   font-size: 20px;
   color: white;
 }
 
-.current__round-number{
+.current__round-number {
   font-size: 20px;
   color: white;
 }
@@ -141,7 +144,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.5); /* затемнение */
+  background: rgba(0, 0, 0, 0.5); /* затемнение */
   z-index: 999; /* выше фона, ниже самого попапа */
 }
 
@@ -157,11 +160,11 @@ body {
   z-index: 1000; /* выше всего */
 }
 
-.title__error{
+.title__error {
   color: red;
 }
 
-.modal__wrapper{
+.modal__wrapper {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -169,25 +172,77 @@ body {
   gap: 10px;
 }
 
-.close__pop{
+.close__pop {
   position: absolute;
   top: -26px;
   right: -28px;
   font-size: 20px;
 }
 
-.title__win{
+.title__win {
   color: green;
 }
 
-.subtitle__win-btn{
+.subtitle__win-btn {
   font-size: 20px;
 }
 
-.title__win{
+.title__win {
   font-size: 19px;
 }
 
-.changeTop{
+.changeTop {
   top: 50%;
+}
+
+.current__level-wrapper {
+  position: absolute;
+  top: 3%;
+  left: 25%;
+}
+
+.changeMargin {
+  margin-top: 10px;
+}
+
+@media (max-width: 700px) {
+  .keyboard__items {
+    max-width: 290px;
+  }
+
+  .keyboard__container {
+    max-width: 290px;
+  }
+
+  .button__container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .button__general {
+    width: 300px;
+  }
+}
+
+@media (max-width: 450px) {
+  .button__general {
+    font-size: 20px;
+    padding: 10px;
+  }
+
+  .keyboard__container {
+    margin: 50px auto 0;
+  }
+
+  .current__round-text {
+    font-size: 15px;
+  }
+
+  .current__round-number {
+    font-size: 15px;
+  }
+
+  .button__container {
+    margin-top: 10px;
+  }
 }

@@ -4,7 +4,6 @@ export const mix = [...numbers, ...letters];
 import { showMainWindows } from "./createBtn.js";
 
 export function generateKeyLayout(arr) {
-
   let keyboardContainer = document.querySelector(".keyboard__container");
   let wrapper = document.querySelector(".wrapper");
   if (keyboardContainer) {
@@ -82,7 +81,7 @@ export function showInput(event) {
   const btnAll = Array.from(document.querySelectorAll(".btn"));
   const input = document.querySelector(".input__text");
   event.target.classList.add("active");
-  input.value += event.target.innerText;
+  input.value += event.target.innerText.toUpperCase();
   disabledAllBtn(btnAll);
 
   setTimeout(() => {
@@ -166,7 +165,7 @@ export function insertValueToInput(event) {
   let strArray = previousSequence.join("");
 
   if (/^[a-zA-Z0-9]$/.test(key)) {
-    input.value += key;
+    input.value += key.toUpperCase();
 
     if (keyButton) {
       keyButton.classList.add("active");
@@ -188,11 +187,13 @@ export let previousSequence = [];
 let sequenceShown = false; // Переменная для хранения предыдущей последовательности
 
 export async function showImitation(array, n) {
-  const repeatBtn = document.querySelector(".button__general");
+  const repeatBtn = document.querySelector(".button__repeat");
+  const newGameBtn = document.querySelector(".button__new");
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   let allKey = Array.from(document.querySelectorAll(".keyboard__item"));
   let input = document.querySelector(".input__text");
   const btnAll = Array.from(document.querySelectorAll(".btn"));
+  const keyBoardItem = Array.from(document.querySelectorAll(".keyboard__item"));
   let sheffleNumbers;
 
   if (!sequenceShown) {
@@ -209,9 +210,11 @@ export async function showImitation(array, n) {
     allKey.forEach((value) => {
       if (element === value.dataset.key) {
         value.classList.add("active");
-        input.value += element;
-        disabledAllBtn(btnAll);
+        input.value += element.toUpperCase();
         repeatBtn.disabled = true;
+        // disabledAllBtn(btnAll);
+        blockAllKeyInputs(keyBoardItem);
+        newGameBtn.disabled = true;
       }
     });
 
@@ -225,7 +228,8 @@ export async function showImitation(array, n) {
     await delay(300);
   }
 
-  noDisabledAllBtn(btnAll);
+  noBlockAllKeyInputs(keyBoardItem);
+  newGameBtn.disabled = false;
   repeatBtn.disabled = false;
   input.value = "";
 
@@ -258,6 +262,7 @@ export function handleKeyPress(event) {
     let strArray = previousSequence.join("");
     let input = document.querySelector(".input__text");
     let btnRepeat = document.querySelector(".button__repeat");
+    // console.log(input.value)
     if (!modal) {
       if (strArray.startsWith(input.value)) {
         if (input.value.length === strArray.length) {
@@ -278,7 +283,7 @@ export function handleKeyPress(event) {
           btnRepeat.disabled = true;
           createLosePopUp();
           blockAllKeyInputs(keyBoardItem);
-          console.log("больше нет попыток");
+          // console.log("больше нет попыток");
           musicLose.play();
           showLinearPop();
           setTimeout(() => {
@@ -289,7 +294,8 @@ export function handleKeyPress(event) {
         } else {
           count = count + 1;
           musicOneTry.play();
-          console.log("осталась одна попытка");
+          // console.log("осталась одна попытка");
+          blockAllKeyInputs(keyBoardItem);
           createErrorPopUp();
           showLinearPop();
           setTimeout(() => {
@@ -300,13 +306,13 @@ export function handleKeyPress(event) {
         }
       }
     }
-  }, 0); // 👈 здесь ключ
+  }, 500); // 👈 здесь ключ
 }
 
 function showLinearPop() {
   setTimeout(() => {
     changeTop();
-    console.log("555");
+    // console.log("555");
   }, 200);
 }
 
@@ -336,6 +342,7 @@ export function noBlockAllKeyInputs(keyBoardItem) {
 }
 
 function createErrorPopUp() {
+  const keyBoardItem = Array.from(document.querySelectorAll(".keyboard__item"));
   // Создаём backdrop
   const backdrop = document.createElement("div");
   backdrop.classList.add("modal-backdrop");
@@ -376,6 +383,7 @@ function createErrorPopUp() {
 
   closeImg.addEventListener("click", () => {
     backdrop.remove();
+    noBlockAllKeyInputs(keyBoardItem);
   });
 }
 
@@ -477,4 +485,33 @@ function checkRound() {
     showLinearPop();
     music.play();
   }
+}
+
+export function deleteMenuWrap() {
+  const mainMenu = document.querySelector(".menu__wrapper");
+  mainMenu.classList.add("none");
+  // const buttonContainer=document.querySelector('.button__container');
+  // buttonContainer.classList.add('changeMargin')
+}
+
+export function createCurrentLevel() {
+  let chooseLevel = document.querySelector(".choose__level").innerText;
+  // console.log(chooseLevel.innerText);
+
+  let wrapper = document.querySelector(".wrapper");
+
+  const roundContainer = document.createElement("div");
+  roundContainer.classList.add("round__container");
+
+  const roundWrapper = document.createElement("div");
+  roundWrapper.classList.add("current__level-wrapper");
+
+  const text = document.createElement("div");
+  text.classList.add("current__round-text");
+  text.textContent = `Level : ${chooseLevel}`;
+
+  roundWrapper.appendChild(text);
+  roundContainer.appendChild(roundWrapper);
+
+  wrapper.appendChild(roundContainer);
 }

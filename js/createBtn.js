@@ -5,7 +5,6 @@ import {
   changeButtons,
   clickKeyBoards,
   createCurrentRound,
-  previousSequence,
   numbers,
   letters,
   mix,
@@ -14,6 +13,9 @@ import {
   setCount,
   changeFlagSeq,
   noBlockAllKeyInputs,
+  showImitation,
+  deleteMenuWrap,
+  createCurrentLevel
 } from "./utils.js";
 import { createMenu } from "./createMenu.js";
 import { createKeyboards } from "./createKeyboards.js";
@@ -56,15 +58,17 @@ export function createBtn() {
     createInput();
     clickKeyBoards();
     createCurrentRound();
+    createCurrentLevel();
+    deleteMenuWrap();
     startGame();
   });
 
   btnRepeat.addEventListener(
     "click",
     () => {
-      startGame();
+      showImitation();
       repeatClicked=true;
-      // console.log('repeat');
+      console.log('repeat 1');
     },
     { once: true }
   );
@@ -84,7 +88,8 @@ export function createBtn() {
       btnRepeat.addEventListener(
         "click",
         () => {
-          startGame();
+          showImitation();
+          console.log('repeat 2');
         },
         { once: true }
       );
@@ -116,5 +121,5 @@ export function showMainWindows() {
     createAllElement("mix");
     setPreviousSequence(shuffle([...mix]).slice(0, 2));
   }
-  console.log(previousSequence);
+  // console.log(previousSequence);
 }
