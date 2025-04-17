@@ -354,7 +354,7 @@ function createErrorPopUp() {
 
   // Кнопка закрытия
   const closeImg = document.createElement("img");
-  closeImg.src = "/images/close.png";
+  closeImg.src = "images/close.png";
   closeImg.classList.add("close__pop");
 
   // Заголовок
@@ -474,7 +474,7 @@ export function createMusicPlayer(src, id) {
 function checkRound() {
   const currentRound = document.querySelector(".current__round-number");
   if (currentRound.innerHTML === "5") {
-    createMusicPlayer("/music/fulWin.mp3", "finishGame");
+    createMusicPlayer("music/fulWin.mp3", "finishGame");
     const music = document.getElementById("finishGame");
     const input = document.querySelector(".input__text");
     input.readOnly = true;
