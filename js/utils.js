@@ -1,11 +1,12 @@
+import { showMainWindows } from "./showMainWindows.js";
+
 export const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 export const letters = "QWERTYUIOPASDFGHJKLZXCVBNM".split("");
 export const mix = [...numbers, ...letters];
-import { showMainWindows } from "./createBtn.js";
 
 export function generateKeyLayout(arr) {
   let keyboardContainer = document.querySelector(".keyboard__container");
-  let wrapper = document.querySelector(".wrapper");
+  const wrapper = document.querySelector(".wrapper");
   if (keyboardContainer) {
     keyboardContainer.innerHTML = "";
   } else {
@@ -38,11 +39,11 @@ export function changeFon(level) {
 }
 
 export function createInput() {
-  let wrapper = document.querySelector(".wrapper");
-  let inputWrapper = document.createElement("div");
+  const wrapper = document.querySelector(".wrapper");
+  const inputWrapper = document.createElement("div");
   inputWrapper.classList.add("input__text-wrapper");
 
-  let input = document.createElement("input");
+  const input = document.createElement("input");
   input.className = "input__text";
   input.type = "text";
   input.readOnly = true;
@@ -53,18 +54,18 @@ export function createInput() {
 }
 
 export function addDisabled() {
-  let itemBtn = Array.from(document.querySelectorAll(".menu__item"));
+  const itemBtn = Array.from(document.querySelectorAll(".menu__item"));
   itemBtn.forEach((value) => {
     value.disabled = true;
   });
 }
 
 export function changeButtons() {
-  let btnStart = document.querySelector(".button__start");
+  const btnStart = document.querySelector(".button__start");
   btnStart.classList.add("none");
-  let btnRepeat = document.querySelector(".button__repeat");
+  const btnRepeat = document.querySelector(".button__repeat");
   btnRepeat.classList.remove("none");
-  let btnNew = document.querySelector(".button__new");
+  const btnNew = document.querySelector(".button__new");
   btnNew.classList.remove("none");
 }
 
@@ -92,14 +93,14 @@ export function showInput(event) {
 
 export function shuffle(array) {
   for (let i = array.length - 1; i > 0; i--) {
-    let j = Math.floor(Math.random() * (i + 1)); // случайный индекс от 0 до i
+    const j = Math.floor(Math.random() * (i + 1)); // случайный индекс от 0 до i
     [array[i], array[j]] = [array[j], array[i]]; // меняем местами элементы
   }
   return array;
 }
 
 export function createCurrentRound() {
-  let wrapper = document.querySelector(".wrapper");
+  const wrapper = document.querySelector(".wrapper");
 
   const roundContainer = document.createElement("div");
   roundContainer.classList.add("round__container");
@@ -123,11 +124,8 @@ export function createCurrentRound() {
 }
 
 export function getSliceCount() {
-  let currentNumber = document.querySelector(".current__round-number").innerHTML;
+  const currentNumber = document.querySelector(".current__round-number").innerHTML;
   let n;
-  // console.log("-------");
-  // console.log(currentNumber);
-  // console.log("-------");
   if (+currentNumber === 1) {
     n = 2;
   } else if (+currentNumber === 2) {
@@ -139,7 +137,7 @@ export function getSliceCount() {
   } else if (+currentNumber === 5) {
     n = 10;
   } else {
-    console.log("error");
+    // console.log("error");
   }
 
   return n;
@@ -148,7 +146,6 @@ export function getSliceCount() {
 function disabledAllBtn(btnAll) {
   btnAll.forEach((value) => {
     value.disabled = true;
-    // console.log("aaaaaaaaaaaa");
   });
 }
 
@@ -161,8 +158,7 @@ export function noDisabledAllBtn(btnAll) {
 export function insertValueToInput(event) {
   const key = event.key.toLowerCase();
   const keyButton = document.querySelector(`.keyboard__item[data-key="${key}"]`);
-  let input = document.querySelector(".input__text");
-  let strArray = previousSequence.join("");
+  const input = document.querySelector(".input__text");
 
   if (/^[a-zA-Z0-9]$/.test(key)) {
     input.value += key.toUpperCase();
@@ -189,10 +185,10 @@ let sequenceShown = false; // Переменная для хранения пр�
 export async function showImitation(array, n) {
   const repeatBtn = document.querySelector(".button__repeat");
   const newGameBtn = document.querySelector(".button__new");
+  // eslint-disable-next-line no-promise-executor-return
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-  let allKey = Array.from(document.querySelectorAll(".keyboard__item"));
-  let input = document.querySelector(".input__text");
-  const btnAll = Array.from(document.querySelectorAll(".btn"));
+  const allKey = Array.from(document.querySelectorAll(".keyboard__item"));
+  const input = document.querySelector(".input__text");
   const keyBoardItem = Array.from(document.querySelectorAll(".keyboard__item"));
   let sheffleNumbers;
 
@@ -201,11 +197,13 @@ export async function showImitation(array, n) {
     previousSequence = sheffleNumbers.slice(0, n); // Сохраняем текущую последовательность
   }
 
-  let resultArray = previousSequence;
+  const resultArray = previousSequence;
+  // eslint-disable-next-line no-console
   console.log(previousSequence);
   for (let index = 0; index < resultArray.length; index++) {
-    let element = resultArray[index];
+    const element = resultArray[index];
 
+    /* eslint-disable-next-line no-await-in-loop */
     await delay(300);
     allKey.forEach((value) => {
       if (element === value.dataset.key) {
@@ -218,13 +216,14 @@ export async function showImitation(array, n) {
       }
     });
 
+    /* eslint-disable-next-line no-await-in-loop */
     await delay(500);
     allKey.forEach((value) => {
       if (element === value.dataset.key) {
         value.classList.remove("active");
       }
     });
-
+    /* eslint-disable-next-line no-await-in-loop */
     await delay(300);
   }
 
@@ -251,18 +250,18 @@ export function setCount(value) {
 
 let count = 0;
 
-export function handleKeyPress(event) {
+export function handleKeyPress() {
   setTimeout(() => {
     const btmNext = document.querySelector(".button__next");
     const btmRepeat = document.querySelector(".button__repeat");
     const keyBoardItem = Array.from(document.querySelectorAll(".keyboard__item"));
-    let modal = document.querySelector(".modal-backdrop");
-    let musicOneTry = document.getElementById("oneTry");
-    let musicLose = document.getElementById("loseMusic");
-    let strArray = previousSequence.join("");
-    let input = document.querySelector(".input__text");
-    let btnRepeat = document.querySelector(".button__repeat");
-    // console.log(input.value)
+    const modal = document.querySelector(".modal-backdrop");
+    const musicOneTry = document.getElementById("oneTry");
+    const musicLose = document.getElementById("loseMusic");
+    const strArray = previousSequence.join("");
+    const input = document.querySelector(".input__text");
+    const btnRepeat = document.querySelector(".button__repeat");
+    // console.log(input.value);
     if (!modal) {
       if (strArray.startsWith(input.value)) {
         if (input.value.length === strArray.length) {
@@ -278,32 +277,30 @@ export function handleKeyPress(event) {
           setCount(0);
           checkRound();
         }
+      } else if (count === 1) {
+        btnRepeat.disabled = true;
+        createLosePopUp();
+        blockAllKeyInputs(keyBoardItem);
+        // console.log("больше нет попыток");
+        musicLose.play();
+        showLinearPop();
+        setTimeout(() => {
+          input.value = "";
+          musicLose.pause();
+          musicLose.currentTime = 0;
+        }, 1500);
       } else {
-        if (count === 1) {
-          btnRepeat.disabled = true;
-          createLosePopUp();
-          blockAllKeyInputs(keyBoardItem);
-          // console.log("больше нет попыток");
-          musicLose.play();
-          showLinearPop();
-          setTimeout(() => {
-            input.value = "";
-            musicLose.pause();
-            musicLose.currentTime = 0;
-          }, 1500);
-        } else {
-          count = count + 1;
-          musicOneTry.play();
-          // console.log("осталась одна попытка");
-          blockAllKeyInputs(keyBoardItem);
-          createErrorPopUp();
-          showLinearPop();
-          setTimeout(() => {
-            input.value = "";
-            musicOneTry.pause();
-            musicOneTry.currentTime = 0;
-          }, 1500);
-        }
+        count += 1;
+        musicOneTry.play();
+        // console.log("осталась одна попытка");
+        blockAllKeyInputs(keyBoardItem);
+        createErrorPopUp();
+        showLinearPop();
+        setTimeout(() => {
+          input.value = "";
+          musicOneTry.pause();
+          musicOneTry.currentTime = 0;
+        }, 1500);
       }
     }
   }, 500); // 👈 здесь ключ
@@ -317,7 +314,7 @@ function showLinearPop() {
 }
 
 function changeTop() {
-  let popUpModal = document.querySelector(".modal");
+  const popUpModal = document.querySelector(".modal");
   popUpModal.classList.add("changeTop");
 }
 
@@ -429,7 +426,7 @@ function createLosePopUp() {
 }
 
 function createWinPopUp() {
-  let wrapper = document.querySelector(".wrapper");
+  const wrapper = document.querySelector(".wrapper");
 
   const backdrop = document.createElement("div");
   backdrop.classList.add("modal-backdrop");
@@ -475,11 +472,11 @@ export function createMusicPlayer(src, id) {
 }
 
 function checkRound() {
-  let currentRound = document.querySelector(".current__round-number");
+  const currentRound = document.querySelector(".current__round-number");
   if (currentRound.innerHTML === "5") {
     createMusicPlayer("/music/fulWin.mp3", "finishGame");
-    let music = document.getElementById("finishGame");
-    let input = document.querySelector(".input__text");
+    const music = document.getElementById("finishGame");
+    const input = document.querySelector(".input__text");
     input.readOnly = true;
     createWinPopUp();
     showLinearPop();
@@ -495,10 +492,10 @@ export function deleteMenuWrap() {
 }
 
 export function createCurrentLevel() {
-  let chooseLevel = document.querySelector(".choose__level").innerText;
+  const chooseLevel = document.querySelector(".choose__level").innerText;
   // console.log(chooseLevel.innerText);
 
-  let wrapper = document.querySelector(".wrapper");
+  const wrapper = document.querySelector(".wrapper");
 
   const roundContainer = document.createElement("div");
   roundContainer.classList.add("round__container");

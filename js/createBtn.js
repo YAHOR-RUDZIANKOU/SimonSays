@@ -5,26 +5,20 @@ import {
   changeButtons,
   clickKeyBoards,
   createCurrentRound,
-  numbers,
-  letters,
-  mix,
-  setPreviousSequence,
-  shuffle,
-  setCount,
   changeFlagSeq,
   noBlockAllKeyInputs,
   showImitation,
   deleteMenuWrap,
-  createCurrentLevel
+  createCurrentLevel,
 } from "./utils.js";
-import { createMenu } from "./createMenu.js";
-import { createKeyboards } from "./createKeyboards.js";
+
+import { showMainWindows } from "./showMainWindows.js";
 
 let repeatClicked = false;
 export function createBtn() {
-  let wrapper = document.querySelector(".wrapper");
+  const wrapper = document.querySelector(".wrapper");
 
-  let btnContainer = document.createElement("div");
+  const btnContainer = document.createElement("div");
   btnContainer.classList.add("button__container");
 
   const btnNext = document.createElement("button");
@@ -32,7 +26,7 @@ export function createBtn() {
   btnNext.textContent = "Next";
 
   const btnRepeat = document.createElement("button");
-  btnRepeat.classList.add("button__general", "button__repeat", "none","btn");
+  btnRepeat.classList.add("button__general", "button__repeat", "none", "btn");
   btnRepeat.textContent = "Repeat the sequence";
 
   const btnStart = document.createElement("button");
@@ -66,30 +60,32 @@ export function createBtn() {
   btnRepeat.addEventListener(
     "click",
     () => {
+      const input = document.querySelector(".input__text");
       showImitation();
-      repeatClicked=true;
-      console.log('repeat 1');
+      input.value = " ";
+      repeatClicked = true;
     },
     { once: true }
   );
 
   btnNew.addEventListener("click", showMainWindows);
 
-  btnNext.addEventListener("click", (event) => {
+  btnNext.addEventListener("click", () => {
     const keyBoardItem = Array.from(document.querySelectorAll(".keyboard__item"));
     btnNext.classList.add("none");
     btnRepeat.classList.remove("none");
 
-    let currentRound = document.querySelector(".current__round-number");
-    let currentRoundNumber = currentRound.innerHTML;
+    const currentRound = document.querySelector(".current__round-number");
+    const currentRoundNumber = currentRound.innerHTML;
     currentRound.innerHTML = +currentRoundNumber + 1;
 
-    if(repeatClicked){
+    if (repeatClicked) {
       btnRepeat.addEventListener(
         "click",
         () => {
+          const input = document.querySelector(".input__text");
+          input.value = " ";
           showImitation();
-          console.log('repeat 2');
         },
         { once: true }
       );
@@ -99,27 +95,4 @@ export function createBtn() {
     changeFlagSeq(false);
     startGame();
   });
-}
-
-function createAllElement(par) {
-  createMenu(par);
-  createBtn();
-  createKeyboards(par);
-}
-
-export function showMainWindows() {
-  setCount(0);
-  let count = Array.from(document.querySelectorAll(".keyboard__item"));
-  document.body.innerHTML = "";
-  if (count.length === 10) {
-    createAllElement("numbers");
-    setPreviousSequence(shuffle([...numbers]).slice(0, 2));
-  } else if (count.length === 26) {
-    createAllElement("letters");
-    setPreviousSequence(shuffle([...letters]).slice(0, 2));
-  } else {
-    createAllElement("mix");
-    setPreviousSequence(shuffle([...mix]).slice(0, 2));
-  }
-  // console.log(previousSequence);
 }

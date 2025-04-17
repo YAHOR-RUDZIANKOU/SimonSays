@@ -2,7 +2,6 @@ import { createKeyboards } from "./createKeyboards.js";
 import { changeFon } from "./utils.js";
 
 export function createMenu(level) {
-  const btnStart = document.querySelector(".button__start-wrapper");
   const wrapper = document.createElement("div");
   wrapper.classList.add("wrapper");
 
