@@ -10,9 +10,9 @@ import {
 } from "./utils.js";
 
 export async function startGame() {
-  createMusicPlayer("/music/winChoose.mp3", "winMusic");
-  createMusicPlayer("/music/fulFail.mp3", "loseMusic");
-  createMusicPlayer("/music/oneTry.mp3", "oneTry");
+  createMusicPlayer("music/winChoose.mp3", "winMusic");
+  createMusicPlayer("music/fulFail.mp3", "loseMusic");
+  createMusicPlayer("music/oneTry.mp3", "oneTry");
   const keyItem = Array.from(document.querySelectorAll(".keyboard__item"));
   const input = document.querySelector(".input__text");
   const count = getSliceCount();
